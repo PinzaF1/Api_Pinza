@@ -2,6 +2,9 @@
 import router from '@adonisjs/core/services/router'
 import KolbController from '../app/controllers/kolb_controller.js'
 
+router.get('/health', async () => ({ status: 'ok' }))
+// Importa el controlador de Kolb
+
 // Instancia del controlador (usa arrow functions en el controller, así que no pierde el this)
 const c = new KolbController()
 

@@ -5,13 +5,16 @@
   "type": "module",
   "license": "UNLICENSED",
   "scripts": {
-    "start": "node bin/server.js",
     "build": "node ace build",
+    "start": "node build/server.js",
     "dev": "node ace serve --hmr",
     "test": "node ace test",
     "lint": "eslint .",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit"
+  },
+  "engines": {
+    "node": ">=20 <21"
   },
   "imports": {
     "#controllers/*": "./app/controllers/*.js",
