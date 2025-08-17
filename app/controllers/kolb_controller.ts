@@ -1,15 +1,21 @@
-// app/controllers/kolb_controller.ts
+import type { HttpContext } from '@adonisjs/core/http'
 import KolbService from '../service/kolb_service.js'
+
 const kolb = new KolbService()
 
 export default class KolbController {
-  // Catálogos
-  estilos = async ({ response }) => response.json(await kolb.listarEstilos())
-  preguntas = async ({ response }) => response.json(await kolb.listarPreguntas())
-  preguntasBloques = async ({ response }) => response.json(await kolb.preguntasPorBloque())
+  // -------- Catálogos --------
+  estilos = async ({ response }: HttpContext) =>
+    response.json(await kolb.listarEstilos())
 
-  // Estudiantes
-  crearEstudiante = async ({ request, response }) => {
+  preguntas = async ({ response }: HttpContext) =>
+    response.json(await kolb.listarPreguntas())
+
+  preguntasBloques = async ({ response }: HttpContext) =>
+    response.json(await kolb.preguntasPorBloque())
+
+  // -------- Estudiantes --------
+  crearEstudiante = async ({ request, response }: HttpContext) => {
     const { nombres_e, apellidos_e, nombres, apellidos } = request.all()
 
     const data = {
@@ -30,20 +36,18 @@ export default class KolbController {
     }
   }
 
-  estudiantes = async ({ response }) => response.json(await kolb.listarEstudiantes())
+  estudiantes = async ({ response }: HttpContext) =>
+    response.json(await kolb.listarEstudiantes())
 
-  estudiante = async ({ params, response }) =>
+  estudiante = async ({ params, response }: HttpContext) =>
     response.json(
       (await kolb.estudianteConEstiloActual(Number(params.id_estudiante))) ??
-        { msj: 'No encontrado' }
+        { msj: 'No encontrado' },
     )
 
-  // Test
-  responderYCalcular = async ({ request, response }) => {
-    // Acepta id_estudiante o idestudiante (por si el front envía cualquiera)
-    const idEst = Number(
-      request.input('id_estudiante') ?? request.input('idestudiante')
-    )
+  // -------- Test --------
+  responderYCalcular = async ({ request, response }: HttpContext) => {
+    const idEst = Number(request.input('id_estudiante') ?? request.input('idestudiante'))
     const fecha_presentacion = request.input('fecha_presentacion')
     const respuestas = request.input('respuestas')
 
@@ -59,9 +63,10 @@ export default class KolbController {
     return response.json(res)
   }
 
-  resultado = async ({ params, response }) =>
+  // -------- Resultados --------
+  resultado = async ({ params, response }: HttpContext) =>
     response.json(
       (await kolb.ultimoResultado(Number(params.id_estudiante))) ??
-        { msj: 'Sin resultados' }
+        { msj: 'Sin resultados' },
     )
 }
